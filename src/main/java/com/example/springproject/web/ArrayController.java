@@ -23,55 +23,33 @@ public class ArrayController {
     }
 
     @GetMapping("/duplicates/{id}")
-    public String getDuplicates(@PathVariable int id){
-        return "Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                +"\nData: "+arrayService.getAll(id) + "\nDuplicates: " + arrayService.getDuplicates(id);
+    public ResponseEntity<String> getDuplicates(@PathVariable int id){
+        return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
+                +"\nData: "+arrayService.getAll(id) + "\nDuplicates: " + arrayService.getDuplicates(id));
     }
 
     @GetMapping("/largest/{id}")
-    public String getLargest(@PathVariable int id){
-        return "Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                +"\nData: "+arrayService.getAll(id)+ "\nLargest element: " + arrayService.getLargestElement(id);
+    public ResponseEntity<String> getLargest(@PathVariable int id){
+        return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
+                +"\nData: "+arrayService.getAll(id)+ "\nLargest element: " + arrayService.getLargestElement(id));
     }
 
     @GetMapping("/first/{id}")
-    public String getFirst(@PathVariable int id){
-        return "Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                +"\nData: "+arrayService.getAll(id)+ "\nFirst element: " + arrayService.getFirstElement(id);
+    public ResponseEntity<String> getFirst(@PathVariable int id){
+        return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
+                +"\nData: "+arrayService.getAll(id)+ "\nFirst element: " + arrayService.getFirstElement(id));
     }
 
     //CRUD
-//    @GetMapping("/arrays")
-//    public List<Array> getArrays (){
-//        return arrayService.getAllArrays();
-//    }
-
     @GetMapping("/arrays")
     public ResponseEntity<List<Array>> getArrays (){
         return new ResponseEntity<>(arrayService.getAllArrays(), HttpStatus.OK);
     }
 
-
-//    @GetMapping("/arrays/{id}")
-//    public Array getArray(@PathVariable int id){
-//        return arrayService.getArrayById(id);
-//    }
-
     @GetMapping("/arrays/{id}")
     public ResponseEntity<Array> getArray(@PathVariable int id){
         return new ResponseEntity<>( arrayService.getArrayById(id), HttpStatus.OK);
     }
-
-
-//    @PostMapping("/arrays")
-//    public Array createArray(@RequestBody Array arr) {
-//        return arrayService.createArray(arr);
-//    }
-
-//    @PostMapping("/arrays")
-//    public ResponseEntity<Array> createArray(@RequestBody Array arr) {
-//        return new ResponseEntity<>(arrayService.createArray(arr), HttpStatus.CREATED);
-//    }
 
     @PostMapping("/arrays")
     public ResponseEntity<Message> createArray(@RequestBody Array arr) {
@@ -84,17 +62,6 @@ public class ArrayController {
                 HttpStatus.CREATED);
     }
 
-
-//    @PutMapping("/arrays/{id}")
-//    public Array updateArray(@PathVariable int id, @RequestBody Array arr){
-//        return arrayService.updateArray(id, arr);
-//    }
-
-//    @PutMapping("/arrays/{id}")
-//    public ResponseEntity<Array> updateArray(@PathVariable int id, @RequestBody Array arr){
-//        return new ResponseEntity<>(arrayService.updateArray(id, arr), HttpStatus.OK);
-//    }
-
     @PutMapping("/arrays/{id}")
     public ResponseEntity<Message> updateArray(@PathVariable int id, @RequestBody Array arr){
         arrayService.updateArray(id, arr);
@@ -105,17 +72,6 @@ public class ArrayController {
                 ZonedDateTime.now()),
                 HttpStatus.OK);
     }
-
-//    @DeleteMapping("/arrays/{id}")
-//    public void deleteArray(@PathVariable int id) {
-//        arrayService.deleteArray(id);
-//    }
-
-//    @DeleteMapping("/arrays/{id}")
-//    public ResponseEntity<String> deleteArray(@PathVariable int id) {
-//        arrayService.deleteArray(id);
-//        return new ResponseEntity<>("Deleted",HttpStatus.NO_CONTENT);
-//    }
 
     @DeleteMapping("/arrays/{id}")
     public ResponseEntity<Message> deleteArray(@PathVariable int id) {

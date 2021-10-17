@@ -3,13 +3,13 @@ package com.example.springproject.exception;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus
-public class ResourceNotFoundException extends RuntimeException{
+public class InternalServerError extends RuntimeException{
 
-    public ResourceNotFoundException(String message) {
+    public InternalServerError(String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable throwable){
+    public InternalServerError(String message, Throwable throwable){
         super(message, throwable);
     }
 

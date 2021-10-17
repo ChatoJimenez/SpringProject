@@ -1,6 +1,7 @@
 package com.example.springproject.service;
 
-import com.example.springproject.exception.ResourceNotFoundException;
+import com.example.springproject.exception.ApiRequestException;
+import com.example.springproject.exception.InternalServerError;
 import com.example.springproject.model.Array;
 import com.example.springproject.repo.ArrayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,13 @@ public class ArrayService {
 
     //CRUD
     public Array createArray(Array array){
-        return arrayRepository.save(array);
+        if(arrayRepository.findById(array.getId()).isPresent()){
+            throw new ApiRequestException("Array with id: "+ array.getId() + " already exists");
+        } else if (array.getData().isEmpty()) {
+            throw new ApiRequestException("Array with id: "+ array.getId() + " cannot be saved with null data");
+        } else {
+            return arrayRepository.save(array);
+        }
     }
 
     public List<Array> getAllArrays(){
@@ -55,7 +62,7 @@ public class ArrayService {
         if(arrOp.isPresent()){
             return arrOp.get();
         } else {
-            throw new ResourceNotFoundException("Array not found with provided id: " + id);
+            throw new InternalServerError("Array not found with provided id: " + id);
         }
     }
 
@@ -64,10 +71,15 @@ public class ArrayService {
     }
 
     public Array updateArray(int id, Array array) {
-        Array updatedArray = getArrayById(id);
-        updatedArray.setData(array.getData());
-        arrayRepository.save(updatedArray);
-        return updatedArray;
+        if (array.getData().isEmpty()){
+            throw new ApiRequestException("Array with id: "+ id + " cannot be updated with null data");
+        } else {
+            Array updatedArray = getArrayById(id);
+            updatedArray.setData(array.getData());
+            arrayRepository.save(updatedArray);
+            return updatedArray;
+        }
+
     }
 
 }
