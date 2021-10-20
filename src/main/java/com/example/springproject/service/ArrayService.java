@@ -61,7 +61,7 @@ public class ArrayService {
 
     public Array getArrayById(int id){
         if(id <= 0) {
-            throw new ApiRequestException("The id needs to be greater than 0");
+            throw new InternalServerError("The id needs to be greater than 0");
         }
         Optional<Array> arrOp = arrayRepository.findById(id);
         if(arrOp.isPresent()){
