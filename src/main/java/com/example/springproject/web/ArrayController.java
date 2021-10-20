@@ -1,6 +1,5 @@
 package com.example.springproject.web;
 
-import com.example.springproject.exception.ApiRequestException;
 import com.example.springproject.model.Array;
 import com.example.springproject.service.ArrayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +21,20 @@ public class ArrayController {
 
     @GetMapping("/duplicates/{id}")
     public ResponseEntity<?> getDuplicates(@PathVariable int id){
-        try{
             return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
                     +"\nData: "+arrayService.getAll(id) + "\nDuplicates: " + arrayService.getDuplicates(id));
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     @GetMapping("/largest/{id}")
     public ResponseEntity<?> getLargest(@PathVariable int id){
-        try{
             return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
                     +"\nData: "+arrayService.getAll(id)+ "\nLargest element: " + arrayService.getLargestElement(id));
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     @GetMapping("/first/{id}")
     public ResponseEntity<?> getFirst(@PathVariable int id){
-        try {
             return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
                     +"\nData: "+arrayService.getAll(id)+ "\nFirst element: " + arrayService.getFirstElement(id));
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     //CRUD
@@ -61,12 +45,7 @@ public class ArrayController {
 
     @GetMapping("/arrays/{id}")
     public ResponseEntity<?> getArray(@PathVariable int id){
-        try{
             return new ResponseEntity<>(arrayService.getArrayById(id), HttpStatus.OK);
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     @PostMapping("/arrays")
@@ -77,24 +56,14 @@ public class ArrayController {
 
     @PutMapping("/arrays/{id}")
     public ResponseEntity<?> updateArray(@PathVariable int id, @RequestBody Array arr){
-        try {
             arrayService.updateArray(id, arr);
             return new ResponseEntity<>("The array with id: " + id + " was updated successfully", HttpStatus.OK);
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     @DeleteMapping("/arrays/{id}")
     public ResponseEntity<?> deleteArray(@PathVariable int id) {
-        try{
             arrayService.deleteArray(id);
             return new ResponseEntity<>("The array with id: " + id + " was deleted successfully", HttpStatus.OK);
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
-        }
-
     }
 
 }

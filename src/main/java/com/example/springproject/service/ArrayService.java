@@ -1,6 +1,6 @@
 package com.example.springproject.service;
 
-import com.example.springproject.exception.ApiRequestException;
+import com.example.springproject.exception.BadRequest;
 import com.example.springproject.exception.InternalServerError;
 import com.example.springproject.model.Array;
 import com.example.springproject.repo.ArrayRepository;
@@ -60,15 +60,20 @@ public class ArrayService {
     }
 
     public Array getArrayById(int id){
-        if(id <= 0) {
-            throw new InternalServerError("The id needs to be greater than 0");
+        try{
+            if(id <= 0) {
+                throw new InternalServerError("The id needs to be greater than 0");
+            }
+            Optional<Array> arrOp = arrayRepository.findById(id);
+            if(arrOp.isPresent()){
+                return arrOp.get();
+            } else {
+                throw new InternalServerError("Array not found with provided id: " + id);
+            }
+        } catch (NumberFormatException e) {
+            throw new BadRequest("The ID provided is not an integer");
         }
-        Optional<Array> arrOp = arrayRepository.findById(id);
-        if(arrOp.isPresent()){
-            return arrOp.get();
-        } else {
-            throw new InternalServerError("Array not found with provided id: " + id);
-        }
+
     }
 
     public void deleteArray(int id) {

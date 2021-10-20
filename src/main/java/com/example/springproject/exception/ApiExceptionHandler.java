@@ -16,15 +16,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(resourceNotFound, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = {ApiRequestException.class})
-    public ResponseEntity<?> handleApiRequestException(ApiRequestException e) {
-        Error apiException = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = {BadRequest.class})
+    public ResponseEntity<?> handleApiRequestException(BadRequest e) {
+        Error badRequest = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
+        return new ResponseEntity<>(badRequest, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<?> handleGlobalException(Exception e) {
-        Error exception = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(value = {Exception.class})
+//    public ResponseEntity<?> handleGlobalException(Exception e) {
+//        Error exception = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
+//        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+//    }
 }
