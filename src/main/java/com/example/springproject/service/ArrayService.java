@@ -55,7 +55,7 @@ public class ArrayService {
     }
 
     public List<Array> getAllArrays(){
-        return (List<Array>) arrayRepository.findAll();
+        return arrayRepository.findAll();
     }
 
     public Array getArrayById(int id){
