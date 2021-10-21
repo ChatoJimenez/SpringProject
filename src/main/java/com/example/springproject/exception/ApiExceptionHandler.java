@@ -12,19 +12,14 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {InternalServerError.class})
     public ResponseEntity<?> handleInternalServerError(InternalServerError e) {
-        Error resourceNotFound = new Error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, ZonedDateTime.now());
-        return new ResponseEntity<>(resourceNotFound, HttpStatus.INTERNAL_SERVER_ERROR);
+        Error internalServerError = new Error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, ZonedDateTime.now());
+        return new ResponseEntity<>(internalServerError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = {ApiRequestException.class})
-    public ResponseEntity<?> handleApiRequestException(ApiRequestException e) {
-        Error apiException = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<?> handleGlobalException(Exception e) {
-        Error exception = new Error(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = {NumberFormatException.class})
+    public ResponseEntity<?> handleNumberFormatException(NumberFormatException e) {
+        Error badRequest = new Error("The ID provided is not an integer", HttpStatus.BAD_REQUEST, ZonedDateTime.now());
+        return new ResponseEntity<>(badRequest, HttpStatus.BAD_REQUEST);
     }
 }

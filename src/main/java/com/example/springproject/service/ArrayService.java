@@ -1,6 +1,5 @@
 package com.example.springproject.service;
 
-import com.example.springproject.exception.ApiRequestException;
 import com.example.springproject.exception.InternalServerError;
 import com.example.springproject.model.Array;
 import com.example.springproject.repo.ArrayRepository;
@@ -45,11 +44,11 @@ public class ArrayService {
     //CRUD
     public Array createArray(Array array){
         if(arrayRepository.findById(array.getId()).isPresent()){
-            throw new ApiRequestException("Array with id: "+ array.getId() + " already exists");
+            throw new InternalServerError("Array with id: "+ array.getId() + " already exists");
         } else if (array.getData().isEmpty()) {
-            throw new ApiRequestException("Array with id: "+ array.getId() + " cannot be saved with null data");
+            throw new InternalServerError("Array with id: "+ array.getId() + " cannot be saved with null data");
         } else if (array.getId() <= 0) {
-            throw new ApiRequestException("The id needs to be greater than 0");
+            throw new InternalServerError("The id needs to be greater than 0");
         } else{
             return arrayRepository.save(array);
         }
@@ -61,7 +60,7 @@ public class ArrayService {
 
     public Array getArrayById(int id){
         if(id <= 0) {
-            throw new ApiRequestException("The id needs to be greater than 0");
+            throw new InternalServerError("The id needs to be greater than 0");
         }
         Optional<Array> arrOp = arrayRepository.findById(id);
         if(arrOp.isPresent()){
@@ -77,9 +76,9 @@ public class ArrayService {
 
     public Array updateArray(int id, Array array) {
         if (array.getData().isEmpty()){
-            throw new ApiRequestException("Array with id: "+ id + " cannot be updated with null data");
+            throw new InternalServerError("Array with id: "+ id + " cannot be updated with null data");
         } else if (array.getId() <= 0) {
-            throw new ApiRequestException("The id needs to be greater than 0");
+            throw new InternalServerError("The id needs to be greater than 0");
         } else {
             Array updatedArray = getArrayById(id);
             updatedArray.setData(array.getData());
