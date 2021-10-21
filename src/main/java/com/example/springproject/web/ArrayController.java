@@ -99,15 +99,31 @@ public class ArrayController {
 
     @PostMapping("/arrays")
     public ResponseEntity<?> createArray(@RequestBody Array arr) {
-        arrayService.createArray(arr);
+        if(arrayService.getArrayById(arr.getId()).isPresent()){
+            return new ResponseEntity<>("The array with id: " + arr.getId() + " already exist", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else if (arr.getData().isEmpty()){
+            return new ResponseEntity<>("Array with id: "+ arr.getId() + " cannot be saved with null data", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else if(arr.getId() <= 0) {
+            return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            arrayService.createArray(arr);
+        }
         return new ResponseEntity<>("The array with id: " + arr.getId() +" was created successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/arrays/{id}")
     public ResponseEntity<?> updateArray(@PathVariable int id, @RequestBody Array arr){
         try {
-            arrayService.updateArray(id, arr);
-            return new ResponseEntity<>("The array with id: " + id + " was updated successfully", HttpStatus.OK);
+            if (arr.getData().isEmpty()){
+                return new ResponseEntity<>("Array with id: "+ id + " cannot be updated with null data", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                arrayService.updateArray(id, arr);
+                return new ResponseEntity<>("The array with id: " + id + " was updated successfully", HttpStatus.OK);
+            }
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }
@@ -117,8 +133,14 @@ public class ArrayController {
     @DeleteMapping("/arrays/{id}")
     public ResponseEntity<?> deleteArray(@PathVariable int id) {
         try{
-            arrayService.deleteArray(id);
-            return new ResponseEntity<>("The array with id: " + id + " was deleted successfully", HttpStatus.OK);
+            if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                arrayService.deleteArray(id);
+                return new ResponseEntity<>("The array with id: " + id + " was deleted successfully", HttpStatus.OK);
+            }
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }

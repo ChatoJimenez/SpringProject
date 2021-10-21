@@ -44,15 +44,7 @@ public class ArrayService {
 
     //CRUD
     public Array createArray(Array array){
-        if(arrayRepository.findById(array.getId()).isPresent()){
-            throw new InternalServerError("Array with id: "+ array.getId() + " already exists");
-        } else if (array.getData().isEmpty()) {
-            throw new InternalServerError("Array with id: "+ array.getId() + " cannot be saved with null data");
-        } else if (array.getId() <= 0) {
-            throw new InternalServerError("The id needs to be greater than 0");
-        } else{
-            return arrayRepository.save(array);
-        }
+        return arrayRepository.save(array);
     }
 
     public List<Array> getAllArrays(){
@@ -68,17 +60,10 @@ public class ArrayService {
     }
 
     public Array updateArray(int id, Array array) {
-        if (array.getData().isEmpty()){
-            throw new InternalServerError("Array with id: "+ id + " cannot be updated with null data");
-        } else if (array.getId() <= 0) {
-            throw new InternalServerError("The id needs to be greater than 0");
-        } else {
-            Array updatedArray = getArrayById(id).get();
-            updatedArray.setData(array.getData());
-            arrayRepository.save(updatedArray);
-            return updatedArray;
-        }
-
+        Array updatedArray = getArrayById(id).get();
+        updatedArray.setData(array.getData());
+        arrayRepository.save(updatedArray);
+        return updatedArray;
     }
 
 }
