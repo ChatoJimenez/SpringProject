@@ -1,7 +1,5 @@
 package com.example.springproject.service;
 
-import com.example.springproject.exception.ApiRequestException;
-import com.example.springproject.exception.InternalServerError;
 import com.example.springproject.model.Array;
 import com.example.springproject.repo.ArrayRepository;
 import org.springframework.beans.factory.annotation.Autowired;

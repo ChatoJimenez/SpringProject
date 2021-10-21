@@ -1,6 +1,5 @@
 package com.example.springproject.web;
 
-import com.example.springproject.exception.ApiRequestException;
 import com.example.springproject.model.Array;
 import com.example.springproject.service.ArrayService;
 import org.springframework.beans.factory.annotation.Autowired;
