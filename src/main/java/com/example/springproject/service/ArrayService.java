@@ -19,26 +19,26 @@ public class ArrayService {
     ArrayRepository arrayRepository;
 
     public Optional<Integer> getFirstElement(int id) {
-        return getArrayById(id).getData().stream()
+        return getArrayById(id).get().getData().stream()
                 .findFirst();
     }
 
     public List<Integer> getDuplicates(int id){
-        return getArrayById(id).getData().stream().
-                filter(num -> Collections.frequency(getArrayById(id).getData(), num) > 1)
+        return getArrayById(id).get().getData().stream().
+                filter(num -> Collections.frequency(getArrayById(id).get().getData(), num) > 1)
                 .sorted()
                 .distinct()
                 .collect(Collectors.toList());
     }
 
     public Optional<Integer> getLargestElement(int id){
-        return getArrayById(id).getData().stream()
+        return getArrayById(id).get().getData().stream()
                 .sorted()
                 .reduce((n1, n2) -> n2);
     }
 
     public List<Integer> getAll(int id){
-        return getArrayById(id).getData().stream().
+        return getArrayById(id).get().getData().stream().
                 collect(Collectors.toList());
     }
 
@@ -59,20 +59,12 @@ public class ArrayService {
         return (List<Array>) arrayRepository.findAll();
     }
 
-    public Array getArrayById(int id){
-        if(id <= 0) {
-            throw new InternalServerError("The id needs to be greater than 0");
-        }
-        Optional<Array> arrOp = arrayRepository.findById(id);
-        if(arrOp.isPresent()){
-            return arrOp.get();
-        } else {
-            throw new InternalServerError("Array not found with provided id: " + id);
-        }
+    public Optional<Array> getArrayById(int id){
+        return arrayRepository.findById(id);
     }
 
     public void deleteArray(int id) {
-        arrayRepository.delete(getArrayById(id));
+        arrayRepository.delete(getArrayById(id).get());
     }
 
     public Array updateArray(int id, Array array) {
@@ -81,7 +73,7 @@ public class ArrayService {
         } else if (array.getId() <= 0) {
             throw new InternalServerError("The id needs to be greater than 0");
         } else {
-            Array updatedArray = getArrayById(id);
+            Array updatedArray = getArrayById(id).get();
             updatedArray.setData(array.getData());
             arrayRepository.save(updatedArray);
             return updatedArray;

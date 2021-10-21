@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import java.util.List;
 
 @RestController
@@ -23,8 +25,14 @@ public class ArrayController {
     @GetMapping("/duplicates/{id}")
     public ResponseEntity<?> getDuplicates(@PathVariable int id){
         try{
-            return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                    +"\nData: "+arrayService.getAll(id) + "\nDuplicates: " + arrayService.getDuplicates(id));
+            if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).get().getId() +"\nName: "+ arrayService.getArrayById(id).get().getName()
+                        +"\nData: "+arrayService.getAll(id) + "\nDuplicates: " + arrayService.getDuplicates(id));
+            }
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }
@@ -34,8 +42,15 @@ public class ArrayController {
     @GetMapping("/largest/{id}")
     public ResponseEntity<?> getLargest(@PathVariable int id){
         try{
-            return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                    +"\nData: "+arrayService.getAll(id)+ "\nLargest element: " + arrayService.getLargestElement(id));
+            if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).get().getId() +"\nName: "+ arrayService.getArrayById(id).get().getName()
+                        +"\nData: "+arrayService.getAll(id)+ "\nLargest element: " + arrayService.getLargestElement(id));
+            }
+
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }
@@ -45,8 +60,15 @@ public class ArrayController {
     @GetMapping("/first/{id}")
     public ResponseEntity<?> getFirst(@PathVariable int id){
         try {
-            return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).getId() +"\nName: "+ arrayService.getArrayById(id).getName()
-                    +"\nData: "+arrayService.getAll(id)+ "\nFirst element: " + arrayService.getFirstElement(id));
+            if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                return  ResponseEntity.ok("Id: "+ arrayService.getArrayById(id).get().getId() +"\nName: "+ arrayService.getArrayById(id).get().getName()
+                        +"\nData: "+arrayService.getAll(id)+ "\nFirst element: " + arrayService.getFirstElement(id));
+            }
+
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }
@@ -62,8 +84,14 @@ public class ArrayController {
     @GetMapping("/arrays/{id}")
     public ResponseEntity<?> getArray(@PathVariable int id){
         try{
-            return new ResponseEntity<>(arrayService.getArrayById(id), HttpStatus.OK);
-        } catch (NumberFormatException e) {
+            if(id <= 0) {
+                return new ResponseEntity<>("The ID needs to be greater than 0", HttpStatus.INTERNAL_SERVER_ERROR);
+            } else if (!arrayService.getArrayById(id).isPresent()){
+                return new ResponseEntity<>("Array not found with provided id: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                return new ResponseEntity<>(arrayService.getArrayById(id), HttpStatus.OK);
+            }
+        } catch (MethodArgumentTypeMismatchException e) {
             return new ResponseEntity<>("The ID is not an integer", HttpStatus.BAD_REQUEST);
         }
 
